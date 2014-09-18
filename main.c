@@ -1,11 +1,4 @@
-/* main.c */
-
-/*
-    This program demonstrates a simple application of JSON_parser. It reads
-    a JSON text from STDIN, producing an error message if the text is rejected.
-
-        % JSON_parser <test/pass1.json
-*/
+/* main.c for using JSONPARSER*/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -32,13 +25,13 @@ int main(int argc, char* argv[]) {
     config.allow_comments         = 1;
     config.handle_floats_manually = 0;
     
-    /* Important! Set locale before parser is created.*/
+    /* Setting locale before parser is created.*/
     if (argc >= 2) {
         if (!setlocale(LC_ALL, argv[1])) {
             fprintf(stderr, "Failed to set locale to '%s'\n", argv[1]);
         }
     } else {
-        fprintf(stderr, "No locale provided, C locale is used\n");
+        fprintf(stderr, "No locale provided, the default (C) locale is being used\n");
     }
     
     jc = new_JSON_parser(&config);
@@ -97,7 +90,7 @@ static int print(void* ctx, int type, const JSON_value* value)
         print_indention();
         printf("]\n");
         break;
-   case JSON_T_OBJECT_BEGIN:
+    case JSON_T_OBJECT_BEGIN:
        if (!s_IsKey) print_indention();
        s_IsKey = 0;
        printf("{\n");
@@ -117,7 +110,7 @@ static int print(void* ctx, int type, const JSON_value* value)
     case JSON_T_FLOAT:
         if (!s_IsKey) print_indention();
         s_IsKey = 0;
-        printf("float: %f\n", value->vu.float_value); /* We wanted stringified floats */
+        printf("float: %f\n", value->vu.float_value); 
         break;
     case JSON_T_NULL:
         if (!s_IsKey) print_indention();
@@ -151,5 +144,4 @@ static int print(void* ctx, int type, const JSON_value* value)
     
     return 1;
 }
-
 
